@@ -4,16 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class Bank {
+    
+
     private final Map<String, Double> exchangeRates;
 
     private Bank(Map<String, Double> exchangeRates) {
         this.exchangeRates = exchangeRates;
     }
 
-    public static Bank withExchangeRate(Currency currency1, Currency currency2, double rate) {
+    public static Bank createBank(Currency currency1, Currency currency2, double rate) {
         var bank = new Bank(new HashMap<>());
         bank.addExchangeRate(currency1, currency2, rate);
-
         return bank;
     }
 
