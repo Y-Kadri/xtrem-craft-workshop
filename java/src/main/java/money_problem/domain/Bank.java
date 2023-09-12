@@ -19,16 +19,24 @@ public final class Bank {
     }
 
     public void addExchangeRate(Currency currency1, Currency currency2, double rate) {
-        exchangeRates.put(currency1 + "->" + currency2, rate);
+        exchangeRates.put(this.createStringForExchange(currency1, currency2), rate);
     }
 
     public double convert(double amount, Currency currency1, Currency currency2) throws MissingExchangeRateException {
-        if (!(currency1 == currency2 || exchangeRates.containsKey(currency1 + "->" + currency2))) {
+        if (this.canConvert(currency1, currency2)) {
             throw new MissingExchangeRateException(currency1, currency2);
         }
         return currency1 == currency2
                 ? amount
-                : amount * exchangeRates.get(currency1 + "->" + currency2);
+                : amount * exchangeRates.get(this.createStringForExchange(currency1, currency2));
+    }
+
+    private boolean canConvert(Currency currency1, Currency currency2) {
+       return !(currency1 == currency2 || exchangeRates.containsKey(this.createStringForExchange(currency1, currency2)));
+    }
+
+    private String createStringForExchange(Currency currency1, Currency currency2) {
+        return currency1 + "->" + currency2;
     }
 
 }
