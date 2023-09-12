@@ -52,3 +52,13 @@ We have structured this workshop using the [4C model](https://www.bowperson.com/
 - [Concepts](docs/concepts.md)
 - [Concrete Practice](docs/facilitation.md)
 - [Conclusion](docs/conclusion.md)
+
+
+## Member
+Language choice : Java
+
+-Yanis KADRI
+-Robin PLUVIAUX
+-AURELIEN LUXEY
+-FLORIAN BERGER
+-BENJAMIN GANDELIN
