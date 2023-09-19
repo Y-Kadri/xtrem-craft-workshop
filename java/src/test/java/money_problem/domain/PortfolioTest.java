@@ -17,16 +17,28 @@ import org.junit.jupiter.api.Test;
 class Portfolio {
 
     ArrayList<Currency> tab = new ArrayList<>();
+    Currency currency;
+    float wallet;
+    
+    Portfolio() {
+        currency = USD;
+        wallet = 0;
+    }
     
     
-    
-    void add(int i, Currency currency) {
-        tab.add(currency);
+    void add(float amount, Currency currency) {
+        Bank createBank = Bank.createBank(EUR, USD, 1.2);
+        if (currency == USD) {
+            wallet += amount;
+        } else {
+            try {
+                wallet += createBank.convert(amount, EUR, USD);
+            } catch (MissingExchangeRateException e) {}
+        }
     }
 
-    float evaluate(Currency currency, Bank b) {
-        
-        return 15;
+    float evaluate(Currency currency, Bank bank) {
+        return wallet;
     }
 }
 
