@@ -3,18 +3,33 @@
 ## Format de restitution
 *(rappel, pour chaque US)*
 
-```markdown
-## Titre de l'US (post-it jaunes)
 
-> Question (post-it rouge)
+## As a Bank Customer (post-it jaunes)
+
+- Pas de taux de change ?
+- Quelle solution pour convertir la devise (A et B) pour donner C ? Qu'est-ce qu'il se passe s'il y a énormément devises ?
+- Pas de taux de change si on ajoute deux monnaies similaires ?
+
 
 ### Règle Métier (post-it bleu)
 
-Exemple: (post-it vert)
-
-- [ ] 5 USD + 10 EUR = 17 USD
+Exemple :
 ```
+- 5 USD + 10 EUR
+- Taux de change EUR --> USD = 1.2
+--> Evaluate USD
+* Result = 17 USD
 
+- 5 USD + 10 USD
+--> Evaluate USD
+* Result = 15 USD
+
+- 5 USD + 10 EUR
+- Taux de change USD --> EUR = 0.8
+--> Evaluate EUR
+* Result = 14.1 EUR
+
+```
 Vous pouvez également joindre une photo du résultat obtenu en utilisant les post-its.
 
 ## Évaluation d'un portefeuille
