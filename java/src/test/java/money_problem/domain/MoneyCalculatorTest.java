@@ -11,7 +11,7 @@ class MoneyCalculatorTest {
         // Act
         double add = MoneyCalculator.add(5, USD, 10);
         // Assert
-        assertThat(add).isNotNull();
+        assertThat(add).isEqualTo(15);
     }
 
     @Test
