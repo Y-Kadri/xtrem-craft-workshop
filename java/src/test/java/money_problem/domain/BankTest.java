@@ -9,30 +9,51 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class BankTest {
 
     @Test
-    void convert_eur_to_usd_returns_double() throws MissingExchangeRateException {
-        assertThat(Bank.createBank(EUR, USD, 1.2).convert(10, EUR, USD))
-                .isEqualTo(12);
+    void convertEurToUsdWithExchangeRate() throws MissingExchangeRateException {
+        // Arrange
+        Bank createBank = Bank.createBank(EUR, USD, 1.2);
+        // Act
+        double convert = createBank.convert(10, EUR, USD);
+        // Assert
+        assertThat(convert).isEqualTo(12);
     }
 
     @Test
-    void convert_eur_to_eur_returns_same_value() throws MissingExchangeRateException {
-        assertThat(Bank.createBank(EUR, USD, 1.2).convert(10, EUR, EUR))
-                .isEqualTo(10);
+    void convertEurToUsdWithExchangeRateThrowError() throws MissingExchangeRateException {
+        // Arrange
+        Bank createBank = Bank.createBank(EUR, USD, 1.2);
+        // Act
+        double convert = createBank.convert(10, EUR, EUR);
+        // Assert
+        assertThat(convert).isEqualTo(10);
     }
 
     @Test
-    void convert_throws_exception_on_missing_exchange_rate() {
-        assertThatThrownBy(() -> Bank.createBank(EUR, USD, 1.2).convert(10, EUR, KRW))
+    void convertThrowsExceptionOnMissingExchangeRate() {
+        // Arrange
+        Bank createBank = Bank.createBank(EUR, USD, 1.2);
+        // Assert
+        assertThatThrownBy(() -> {
+            // Act
+            createBank.convert(10, EUR, KRW);
+        })
                 .isInstanceOf(MissingExchangeRateException.class)
                 .hasMessage("EUR->KRW");
     }
 
     @Test
-    void convert_with_different_exchange_rates_returns_different_floats() throws MissingExchangeRateException {
-        assertThat(Bank.createBank(EUR, USD, 1.2).convert(10, EUR, USD))
-                .isEqualTo(12);
-
-        assertThat(Bank.createBank(EUR, USD, 1.3).convert(10, EUR, USD))
-                .isEqualTo(13);
+    void convertWithDifferentExchangeRatesReturnsDifferentFloats() throws MissingExchangeRateException {
+        // Arrange
+        Bank createBank = Bank.createBank(EUR, USD, 1.2);
+        // Act
+        double convert = createBank.convert(10, EUR, USD);
+        // Assert
+        assertThat(convert).isEqualTo(12);
+        // Arrange
+        createBank.addExchangeRate(EUR, USD, 1.3);
+        // Act
+        double convert2 = createBank.convert(10, EUR, USD);
+        // Assert
+        assertThat(convert2).isEqualTo(13);
     }
 }
