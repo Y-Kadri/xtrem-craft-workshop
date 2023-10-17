@@ -38,5 +38,4 @@ public final class Bank {
     private String createStringForExchange(Currency currency1, Currency currency2) {
         return currency1 + "->" + currency2;
     }
-
 }

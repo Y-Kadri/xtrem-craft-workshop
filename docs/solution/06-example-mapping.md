@@ -29,6 +29,12 @@ Exemple :
 --> Evaluate EUR
 * Result = 14.1 EUR
 
+- 5 USD + 10 EUR
+- Taux de change EUR --> KRW = 2
+- Taux de change USD --> KRW = 3
+--> Evaluate KRW
+* Result = 35 KRW
+
 ```
 Vous pouvez également joindre une photo du résultat obtenu en utilisant les post-its.
 
