@@ -18,6 +18,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        working-directory: java
 
     steps:
     - uses: actions/checkout@v3
@@ -28,7 +31,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven and tests
-      run: cd java && mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml
   
   mutation-tests:
     runs-on: ubuntu-latest
@@ -42,12 +45,12 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Run mutation tests
-      run: cd java && mvn org.pitest:pitest-maven:mutationCoverage
+      run: mvn org.pitest:pitest-maven:mutationCoverage
     - name: Upload Mutation Test Results
       uses: actions/upload-artifact@v2
       with:
         name: mutation-results
-        path: java/target/pit-reports
+        path: target/pit-reports
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     # - name: Update dependency graph
