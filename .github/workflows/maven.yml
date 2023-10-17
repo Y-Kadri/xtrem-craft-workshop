@@ -42,7 +42,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Run mutation tests
-      run: mvn pitest:mutationCoverage
+      run: mvn run pitest:mutationCoverage
     - name: Upload Mutation Test Results
       uses: actions/upload-artifact@v2
       with:
