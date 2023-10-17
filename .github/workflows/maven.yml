@@ -36,8 +36,8 @@ jobs:
   mutation-tests:
     runs-on: ubuntu-latest
     defaults:
-    run:
-      working-directory: java
+      run:
+        working-directory: java
     needs: build
     steps:
     - uses: actions/checkout@v3
