@@ -40,7 +40,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Run tests
-      run: mvn test
+      run: cd java && mvn test
     
       
 
