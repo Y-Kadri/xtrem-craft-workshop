@@ -10,17 +10,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class Money {
-    private float amount;
+    private double amount;
     private Currency currency;
 
-    public static Money create(float amount, Currency currency) throws NegativeNumberException {
+    public static Money create(double amount, Currency currency) throws NegativeNumberException, InvalidNumberException {
         if (amount <= 0) {
             throw new NegativeNumberException();
+        }
+        if (Double.isInfinite(amount)) {
+            throw new InvalidNumberException("Number infinite");
         }
         return new Money(amount, currency);
     }
 
-    private Money(float amount, Currency currency) {
+    private Money(double amount, Currency currency) {
         this.amount = amount;
         this.currency = currency;
     }
@@ -54,7 +57,7 @@ class Money {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Money money = (Money) o;
-        return Float.compare(amount, money.amount) == 0 && currency == money.currency;
+        return Double.compare(amount, money.amount) == 0 && currency == money.currency;
     }
 
     @Override
@@ -107,7 +110,7 @@ class MoneyCalculatorTest {
     }
 
     @Test
-    void shouldAddMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException {
+    void shouldAddMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException, InvalidNumberException {
         // Act
         Money money = Money.create(5, Currency.USD);
 
@@ -133,7 +136,7 @@ class MoneyCalculatorTest {
     }
 
     @Test
-    void shouldMultiplyMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException {
+    void shouldMultiplyMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException, InvalidNumberException {
         // Act
         Money money = Money.create(5, Currency.USD);
 
@@ -159,7 +162,7 @@ class MoneyCalculatorTest {
     }
 
     @Test
-    void shouldDivideMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException {
+    void shouldDivideMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException, InvalidNumberException {
         // Act
         Money money = Money.create(5, Currency.USD);
 
@@ -182,5 +185,16 @@ class MoneyCalculatorTest {
         };
         assertThatThrownBy(divisionNegatif)
                 .isInstanceOf(NegativeNumberException.class);
+    }
+
+    @Test
+    void shouldMoneysWithInifiteNumber() {
+        // Assert
+        ThrowableAssert.ThrowingCallable infiniteNumber = () -> {
+            // Act
+            Money.create(Double.POSITIVE_INFINITY, Currency.USD);
+        };
+        assertThatThrownBy(infiniteNumber)
+                .isInstanceOf(InvalidNumberException.class);
     }
 }
