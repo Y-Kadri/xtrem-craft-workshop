@@ -15,7 +15,7 @@ class BankTest {
         // Act
         Money convert = createBank.convert(Money.create(10, EUR), USD);
         // Assert
-        assertThat(convert.getAmount()).isEqualTo(12);
+        assertThat(convert).isEqualTo(Money.create(12, USD));
     }
 
     @Test
@@ -25,7 +25,7 @@ class BankTest {
         // Act
         Money convert = createBank.convert(Money.create(10, EUR), EUR);
         // Assert
-        assertThat(convert.getAmount()).isEqualTo(10);
+        assertThat(convert).isEqualTo(Money.create(10, EUR));
     }
 
     @Test
@@ -48,12 +48,12 @@ class BankTest {
         // Act
         Money convert = createBank.convert(Money.create(10, EUR), USD);
         // Assert
-        assertThat(convert.getAmount()).isEqualTo(12);
+        assertThat(convert).isEqualTo(Money.create(12, USD));
         // Arrange
         createBank.addExchangeRate(EUR, USD, 1.3);
         // Act
         Money convert2 = createBank.convert(Money.create(10, EUR), USD);
         // Assert
-        assertThat(convert2.getAmount()).isEqualTo(13);
+        assertThat(convert2).isEqualTo(Money.create(13, USD));
     }
 }
