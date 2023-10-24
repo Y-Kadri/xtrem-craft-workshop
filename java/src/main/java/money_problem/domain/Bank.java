@@ -22,13 +22,17 @@ public final class Bank {
         exchangeRates.put(this.createStringForExchange(currency1, currency2), rate);
     }
 
-    public double convert(double amount, Currency currency1, Currency currency2) throws MissingExchangeRateException {
-        if (this.canConvert(currency1, currency2)) {
-            throw new MissingExchangeRateException(currency1, currency2);
+    public Money convert(Money money, Currency to) throws MissingExchangeRateException, NegativeNumberException, InvalidNumberException {
+        if (this.canConvert(money.getCurrency(), to)) {
+            throw new MissingExchangeRateException(money.getCurrency(), to);
         }
-        return currency1 == currency2
-                ? amount
-                : amount * exchangeRates.get(this.createStringForExchange(currency1, currency2));
+        return money.getCurrency() == to
+                ? money
+                : money.convert(getExangeRate(money.getCurrency(), to), to);
+    }
+
+    private Double getExangeRate(Currency from, Currency to) {
+        return exchangeRates.get(this.createStringForExchange(from, to));
     }
 
     private boolean canConvert(Currency currency1, Currency currency2) {

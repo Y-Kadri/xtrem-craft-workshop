@@ -9,63 +9,6 @@ import static money_problem.domain.Currency.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class Money {
-    private double amount;
-    private Currency currency;
-
-    public static Money create(double amount, Currency currency) throws NegativeNumberException, InvalidNumberException {
-        if (amount <= 0) {
-            throw new NegativeNumberException();
-        }
-        if (Double.isInfinite(amount)) {
-            throw new InvalidNumberException("Number infinite");
-        }
-        return new Money(amount, currency);
-    }
-
-    private Money(double amount, Currency currency) {
-        this.amount = amount;
-        this.currency = currency;
-    }
-
-    public Money add(Money money) throws InvalidNumberException {
-        if (money.currency != this.currency) {
-            throw new InvalidNumberException("Can't add two different currencies");
-        }
-        return new Money(this.amount + money.amount, this.currency);
-    }
-
-    public Money multiply(Money money) throws InvalidNumberException {
-        if (money.currency != this.currency) {
-            throw new InvalidNumberException("Can't add two different currencies");
-        }
-        return new Money(this.amount * money.amount, this.currency);
-    }
-
-    public Money divide(Money money) throws InvalidNumberException {
-        if (money.amount == 0) {
-            throw new ArithmeticException();
-        }
-        if (money.currency != this.currency) {
-            throw new InvalidNumberException("Can't add two different currencies");
-        }
-        return new Money(this.amount * money.amount, this.currency);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Money money = (Money) o;
-        return Double.compare(amount, money.amount) == 0 && currency == money.currency;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(amount, currency);
-    }
-}
-
 class MoneyCalculatorTest {
     @Test
     void shouldAddUSDNotNull() {
@@ -153,23 +96,23 @@ class MoneyCalculatorTest {
     @Test
     void shouldDivideMoneysWhenCurrenciesAreTheSame() throws InvalidNumberException, NegativeNumberException {
         // Act
-        Money money = Money.create(5, Currency.USD);
-        Money multiply = money.divide(Money.create(10, Currency.USD));
+        Money money = Money.create(10, Currency.USD);
+        Money divide = money.divide(Money.create(2, Currency.USD));
 
         // Assert
-        assertThat(multiply).isEqualTo(Money.create(50, Currency.USD));
-        assertThat(money).isEqualTo(Money.create(5, Currency.USD));
+        assertThat(divide).isEqualTo(Money.create(5, Currency.USD));
+        assertThat(money).isEqualTo(Money.create(10, Currency.USD));
     }
 
     @Test
     void shouldDivideMoneysWhenCurrenciesAreDifferent() throws NegativeNumberException, InvalidNumberException {
         // Act
-        Money money = Money.create(5, Currency.USD);
+        Money money = Money.create(10, Currency.USD);
 
         // Assert
         ThrowableAssert.ThrowingCallable invalidMultiply = () -> {
             // Act
-            money.divide(Money.create(10, KRW));
+            money.divide(Money.create(2, KRW));
         };
         assertThatThrownBy(invalidMultiply)
                 .isInstanceOf(InvalidNumberException.class)

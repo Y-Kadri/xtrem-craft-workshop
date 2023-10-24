@@ -9,23 +9,23 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class BankTest {
 
     @Test
-    void convertEurToUsdWithExchangeRate() throws MissingExchangeRateException {
+    void convertEurToUsdWithExchangeRate() throws MissingExchangeRateException, NegativeNumberException, InvalidNumberException {
         // Arrange
         Bank createBank = Bank.createBank(EUR, USD, 1.2);
         // Act
-        double convert = createBank.convert(10, EUR, USD);
+        Money convert = createBank.convert(Money.create(10, EUR), USD);
         // Assert
-        assertThat(convert).isEqualTo(12);
+        assertThat(convert.getAmount()).isEqualTo(12);
     }
 
     @Test
-    void convertEurToUsdWithExchangeRateThrowError() throws MissingExchangeRateException {
+    void convertEurToUsdWithExchangeRateThrowError() throws MissingExchangeRateException, NegativeNumberException, InvalidNumberException {
         // Arrange
         Bank createBank = Bank.createBank(EUR, USD, 1.2);
         // Act
-        double convert = createBank.convert(10, EUR, EUR);
+        Money convert = createBank.convert(Money.create(10, EUR), EUR);
         // Assert
-        assertThat(convert).isEqualTo(10);
+        assertThat(convert.getAmount()).isEqualTo(10);
     }
 
     @Test
@@ -35,25 +35,25 @@ class BankTest {
         // Assert
         assertThatThrownBy(() -> {
             // Act
-            createBank.convert(10, EUR, KRW);
+            createBank.convert(Money.create(10, EUR), KRW);
         })
                 .isInstanceOf(MissingExchangeRateException.class)
                 .hasMessage("EUR->KRW");
     }
 
     @Test
-    void convertWithDifferentExchangeRatesReturnsDifferentFloats() throws MissingExchangeRateException {
+    void convertWithDifferentExchangeRatesReturnsDifferentFloats() throws MissingExchangeRateException, NegativeNumberException, InvalidNumberException {
         // Arrange
         Bank createBank = Bank.createBank(EUR, USD, 1.2);
         // Act
-        double convert = createBank.convert(10, EUR, USD);
+        Money convert = createBank.convert(Money.create(10, EUR), USD);
         // Assert
-        assertThat(convert).isEqualTo(12);
+        assertThat(convert.getAmount()).isEqualTo(12);
         // Arrange
         createBank.addExchangeRate(EUR, USD, 1.3);
         // Act
-        double convert2 = createBank.convert(10, EUR, USD);
+        Money convert2 = createBank.convert(Money.create(10, EUR), USD);
         // Assert
-        assertThat(convert2).isEqualTo(13);
+        assertThat(convert2.getAmount()).isEqualTo(13);
     }
 }
