@@ -7,7 +7,7 @@ public class Money {
     private Currency currency;
 
     public static Money create(double amount, Currency currency) throws NegativeNumberException, InvalidNumberException {
-        if (amount <= 0) {
+        if (amount < 0) {
             throw new NegativeNumberException();
         }
         if (Double.isInfinite(amount)) {
