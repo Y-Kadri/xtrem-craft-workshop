@@ -1,3 +1,15 @@
+
+## Member
+Language choice : Java
+
+```markdown
+-Yanis KADRI
+-Robin PLUVIAUX
+-AURELIEN LUXEY
+-FLORIAN BERGER
+-BENJAMIN GANDELIN
+```
+
 # Xtrem Craft workshop
 
 This workshop is based on the [Xtrem TDD workshop](https://github.com/les-tontons-crafters/xtrem-tdd-money-kata), 
@@ -53,12 +65,3 @@ We have structured this workshop using the [4C model](https://www.bowperson.com/
 - [Concrete Practice](docs/facilitation.md)
 - [Conclusion](docs/conclusion.md)
 
-
-## Member
-Language choice : Java
-
--Yanis KADRI
--Robin PLUVIAUX
--AURELIEN LUXEY
--FLORIAN BERGER
--BENJAMIN GANDELIN
