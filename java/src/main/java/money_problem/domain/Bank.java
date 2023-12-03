@@ -1,24 +1,30 @@
 package money_problem.domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public final class Bank {
-    private final ArrayList<ExchangeRate> exchangeRates;
+    private final Set<ExchangeRate> exchangeRates;
 
-    private Bank(Map<String, Double> exchangeRates) {
-        this.exchangeRates = new ArrayList<>();
+    private Bank(Set<ExchangeRate> exchangeRates) {
+        this.exchangeRates = exchangeRates;
     }
 
-    public static Bank createBank(Currency currency1, Currency currency2, double rate) {
-        var bank = new Bank(new HashMap<>());
-        bank.addExchangeRate(currency1, currency2, rate);
+    public static Bank createBank(Currency pivot, Currency currency2, double rate) {
+        if (pivot == null) {
+            throw new MissingPivotCurrencyException();
+        }
+        var bank = new Bank(new HashSet<>());
+        bank.addExchangeRate(pivot, currency2, rate);
         return bank;
     }
 
     public void addExchangeRate(Currency currency1, Currency currency2, double rate) {
-        exchangeRates.add(this.createStringForExchange(currency1, currency2), rate);
+        ExchangeRate exist = this.getRateExchangeRate(currency1, currency2);
+        if (exist != null) {
+            exist.setRate(rate);
+        } else {
+            this.exchangeRates.add(new ExchangeRate(this.createStringForExchange(currency1, currency2), rate));
+        }
     }
 
     public Money convert(Money money, Currency to) throws MissingExchangeRateException, NegativeNumberException, InvalidNumberException {
@@ -27,15 +33,29 @@ public final class Bank {
         }
         return money.getCurrency() == to
                 ? money
-                : money.convert(getExangeRate(money.getCurrency(), to), to);
+                : money.convert(getRateExchangeRate(money.getCurrency(), to).getRate(), to);
     }
 
-    private Double getExangeRate(Currency from, Currency to) {
-        return exchangeRates.get(this.createStringForExchange(from, to));
+    private Boolean containsExchangeRate(Currency from, Currency to) {
+        for (ExchangeRate er : this.exchangeRates) {
+            if (er.getStringForExchange().equals(this.createStringForExchange(from, to))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private ExchangeRate getRateExchangeRate(Currency from, Currency to) {
+        for (ExchangeRate er : this.exchangeRates) {
+            if (er.getStringForExchange().equals(this.createStringForExchange(from, to))) {
+                return er;
+            }
+        }
+        return null;
     }
 
     private boolean canConvert(Currency currency1, Currency currency2) {
-       return !(currency1 == currency2 || exchangeRates.containsKey(this.createStringForExchange(currency1, currency2)));
+        return !(currency1 == currency2 || this.containsExchangeRate(currency1, currency2));
     }
 
     private String createStringForExchange(Currency currency1, Currency currency2) {
